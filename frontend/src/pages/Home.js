@@ -35,6 +35,12 @@ function Home() {
         <Link to="/ngo" style={boxStyle}>
   🤝 NGO Help
 </Link>
+<a href="/map.html" target="_blank" style={boxStyle}>
+  🗺️ Open Map
+</a>
+<a href="/housing.html" target="_blank" style={boxStyle}>
+  🏠 Housing Help
+</a>
 
       </div>
     </div>

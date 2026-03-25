@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Housing Support</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    input {
+      padding: 10px;
+      width: 60%;
+      margin-right: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px;
+      background: #38bdf8;
+      cursor: pointer;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 12px;
+    }
+
+    .safe {
+      color: #22c55e;
+    }
+
+    .unsafe {
+      color: #ef4444;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>🏠 Safe Housing Finder</h1>
+
+<input type="text" id="search" placeholder="Enter city..." />
+<button onclick="searchHousing()">Search</button>
+
+<div id="results"></div>
+
+<br>
+<button onclick="joinCommunity()">Join Community 👥</button>
+
+<script>
+
+const listings = [
+
+  // DELHI
+  { title: "1BHK in Delhi", description: "Friendly owner, open to all tenants", verified: true, image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914" },
+  { title: "Flat in South Delhi", description: "Inclusive and welcoming environment", verified: true, image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994" },
+  { title: "Room in Rohini", description: "Only for families, no outsiders allowed", verified: false, image: "https://images.unsplash.com/photo-1501183638710-841dd1904471" },
+  { title: "Studio in Dwarka", description: "Safe and respectful community", verified: true, image: "https://images.unsplash.com/photo-1572120360610-d971b9b639f6" },
+  { title: "Apartment in Lajpat Nagar", description: "No restrictions", verified: true, image: "https://images.unsplash.com/photo-1493809842364-78817add7ffb" },
+
+  // NOIDA
+  { title: "Flat in Noida Sector 62", description: "Inclusive housing", verified: true, image: "https://images.unsplash.com/photo-1507089947368-19c1da9775ae" },
+  { title: "PG in Noida", description: "Only for families", verified: false, image: "https://images.unsplash.com/photo-1484154218962-a197022b5858" },
+  { title: "Studio in Noida Sector 18", description: "Friendly and safe", verified: true, image: "https://images.unsplash.com/photo-1505691938895-1758d7feb511" },
+  { title: "Apartment in Greater Noida", description: "No discrimination policy", verified: true, image: "https://images.unsplash.com/photo-1560185007-cde436f6a4d0" },
+  { title: "Room in Noida Sector 50", description: "No outsiders allowed", verified: false, image: "https://images.unsplash.com/photo-1494526585095-c41746248156" },
+
+  // GURGAON / HARYANA
+  { title: "Flat in Gurgaon", description: "Inclusive and welcoming environment", verified: true, image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267" },
+  { title: "Room in Faridabad", description: "Only families preferred", verified: false, image: "https://images.unsplash.com/photo-1505693314120-0d443867891c" },
+  { title: "Apartment in Panipat", description: "Safe housing", verified: true, image: "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6" },
+  { title: "Studio in Karnal", description: "Friendly landlord", verified: true, image: "https://images.unsplash.com/photo-1560448075-bb485b067938" },
+  { title: "Flat in Sonipat", description: "No restrictions", verified: true, image: "https://images.unsplash.com/photo-1560449752-3fdc3c9f4b66" },
+
+  // JAIPUR
+  { title: "Flat in Jaipur", description: "Inclusive housing", verified: true, image: "https://images.unsplash.com/photo-1598928506311-c55ded91a20c" },
+  { title: "Room in Jaipur", description: "Only families allowed", verified: false, image: "https://images.unsplash.com/photo-1560448070-c6b8a0d4c2b0" },
+  { title: "Studio in Jaipur", description: "Open-minded owner", verified: true, image: "https://images.unsplash.com/photo-1560449750-3a7b8e8a0c92" },
+  { title: "Apartment in Jaipur", description: "No discrimination", verified: true, image: "https://images.unsplash.com/photo-1560448071-8a9c1d7c4b9a" },
+
+  // OTHER STATES
+  { title: "Flat in Mumbai", description: "Inclusive society", verified: true, image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688" },
+  { title: "Room in Pune", description: "Only families", verified: false, image: "https://images.unsplash.com/photo-1505691723518-36a5ac3be353" },
+
+  { title: "Apartment in Bangalore", description: "Tech-friendly housing", verified: true, image: "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5" },
+  { title: "Room in Hyderabad", description: "No outsiders allowed", verified: false, image: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85" },
+
+  { title: "Flat in Kolkata", description: "Welcoming environment", verified: true, image: "https://images.unsplash.com/photo-1505691938895-1758d7feb511" },
+  { title: "Room in Chennai", description: "Only families preferred", verified: false, image: "https://images.unsplash.com/photo-1484154218962-a197022b5858" }
+
+];
+function detectBias(text) {
+  const keywords = ["no outsiders", "only families", "not allowed"];
+  return keywords.some(word => text.toLowerCase().includes(word));
+}
+
+function searchHousing() {
+  const query = document.getElementById("search").value.toLowerCase();
+  const resultsDiv = document.getElementById("results");
+  resultsDiv.innerHTML = "";
+
+  listings.forEach((item) => {
+
+    if (!item.title.toLowerCase().includes(query)) return;
+
+    const isBiased = detectBias(item.description);
+
+    const div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+      <img src="${item.image}" style="width:100%; border-radius:10px;" />
+      <h3>
+  ${item.title} 
+  ${item.verified ? "✔️ Verified" : ""}
+</h3>
+      <p>${item.description}</p>
+      <p class="${isBiased ? "unsafe" : "safe"}">
+        ${isBiased ? "⚠️ Possibly Biased" : "✅ Safe & Inclusive"}
+      </p>
+    `;
+
+    resultsDiv.appendChild(div);
+  });
+}
+
+function joinCommunity() {
+  alert("Connecting you to local LGBTQ+ support groups...");
+}
+
+</script>
+
+</body>
+</html>
