@@ -4,6 +4,7 @@ import SOS from "./pages/SOS";
 import Heatmap from "./pages/Heatmap";
 import Chatbot from "./pages/Chatbot";
 import NGO from "./pages/NGO";
+import Map from "./pages/Map";
 function App() {
   return (
     <BrowserRouter>
@@ -31,6 +32,7 @@ function App() {
         <Route path="/heatmap" element={<Heatmap />} />
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/ngo" element={<NGO />} />
+        <Route path="/map" element={<Map />} />
       </Routes>
 
     </BrowserRouter>

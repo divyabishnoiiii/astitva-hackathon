@@ -30,14 +30,15 @@ function Home() {
         <Link to="/chatbot" style={boxStyle}>
           💬 Chatbot
         </Link>
+        <Link to="/map" style={boxStyle}>
+  🗺️ Map
+</Link>
 
         
         <Link to="/ngo" style={boxStyle}>
   🤝 NGO Help
 </Link>
-<a href="/map.html" target="_blank" style={boxStyle}>
-  🗺️ Open Map
-</a>
+
 <a href="/housing.html" target="_blank" style={boxStyle}>
   🏠 Housing Help
 </a>

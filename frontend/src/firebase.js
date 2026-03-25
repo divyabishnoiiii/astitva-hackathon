@@ -3,7 +3,7 @@ import { getFirestore } from "firebase/firestore";
 
 // your config (same as yours)
 const firebaseConfig = {
-  
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "astitva-d2bee.firebaseapp.com",
   projectId: "astitva-d2bee",
   storageBucket: "astitva-d2bee.firebasestorage.app",
